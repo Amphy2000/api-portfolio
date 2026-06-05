@@ -1,0 +1,12 @@
+{
+  "name": "api-portfolio",
+  "version": "1.0.0",
+  "description": "API Portfolio hosted on Vercel",
+  "main": "api/barcode.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "bwip-js": "^3.4.3"
+  }
+}
