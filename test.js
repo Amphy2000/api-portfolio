@@ -7,6 +7,7 @@ import dnsHandler from './api/dns-lookup.js';
 import schemaHandler from './api/schema-extractor.js';
 import passwordHandler from './api/password-validator.js';
 import uaHandler from './api/ua-parser.js';
+import exchangeRatesHandler from './api/exchange-rates.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
@@ -447,6 +448,65 @@ async function runUaTest(uaVal) {
   console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
 }
 
+// Helper to run Multi-Currency & Crypto Exchange Rates test
+async function runExchangeRatesTest(base, symbols) {
+  const query = {};
+  if (base) query.base = base;
+  if (symbols) query.symbols = symbols;
+
+  const req = {
+    method: 'GET',
+    query
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => {
+      res.headers[name] = val;
+    },
+    status: (code) => {
+      res.status_code = code;
+      return res;
+    },
+    json: (data) => {
+      res.body = data;
+      return res;
+    },
+    send: (data) => {
+      res.body = data;
+      return res;
+    },
+    end: () => {
+      return res;
+    }
+  };
+
+  await exchangeRatesHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`EXCHANGE RATES TEST: base=${base || 'DEFAULT (USD)'}, symbols=${symbols || 'ALL'}`);
+  console.log(`STATUS: ${res.status_code}`);
+  
+  if (res.body && res.body.rates) {
+    // Only print first 5 rates to avoid spamming the log
+    const keys = Object.keys(res.body.rates);
+    const slicedRates = {};
+    keys.slice(0, 5).forEach(k => {
+      slicedRates[k] = res.body.rates[k];
+    });
+    console.log(`RESPONSE:`, JSON.stringify({
+      ...res.body,
+      rates: {
+        ...slicedRates,
+        ...(keys.length > 5 ? { _plus_more: `${keys.length - 5} other currencies...` } : {})
+      }
+    }, null, 2));
+  } else {
+    console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+  }
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -519,6 +579,14 @@ async function main() {
   await runUaTest('Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'); // Android Chrome Mobile
   await runUaTest('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'); // Googlebot
   await runUaTest(null); // Fallback to headers
+
+  // SECTION 10: MULTI-CURRENCY & CRYPTO EXCHANGE RATES TESTS
+  console.log("\n>>> Running Multi-Currency & Crypto Exchange Rates tests...");
+  await runExchangeRatesTest(null, null); // Default: base=USD, all symbols
+  await runExchangeRatesTest('EUR', 'USD,GBP,BTC,ETH'); // Base EUR, filtered symbols
+  await runExchangeRatesTest('BTC', 'USD,EUR,GBP'); // Base Crypto, filtered symbols
+  await runExchangeRatesTest('INVALID', 'USD'); // Invalid base currency
+  await runExchangeRatesTest('USD', 'INVALID_SYM'); // Invalid symbols
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");
