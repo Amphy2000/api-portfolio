@@ -4,6 +4,74 @@ import scraperHandler from './api/scraper.js';
 import vatHandler from './api/vat-validator.js';
 import previewHandler from './api/link-preview.js';
 import dnsHandler from './api/dns-lookup.js';
+import schemaHandler from './api/schema-extractor.js';
+
+// Mock global fetch for schema tests
+const originalFetch = globalThis.fetch;
+globalThis.fetch = async (url, options) => {
+  if (url === 'https://mock-schema-test.com/product') {
+    return {
+      ok: true,
+      status: 200,
+      text: async () => `
+        <html>
+          <head>
+            <script type="application/ld+json">
+              {
+                "@context": "https://schema.org",
+                "@type": "Product",
+                "name": "Super Coffee Maker",
+                "description": "Brew the best espresso at home.",
+                "brand": "EspressoCorp",
+                "sku": "EC-101",
+                "image": "https://example.com/coffee.jpg",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "89.99",
+                  "priceCurrency": "USD",
+                  "availability": "https://schema.org/InStock"
+                },
+                "aggregateRating": {
+                  "@type": "AggregateRating",
+                  "ratingValue": "4.8",
+                  "reviewCount": "120"
+                }
+              }
+            </script>
+          </head>
+          <body>Mock Product Page</body>
+        </html>
+      `
+    };
+  }
+  if (url === 'https://mock-schema-test.com/recipe') {
+    return {
+      ok: true,
+      status: 200,
+      text: async () => `
+        <html>
+          <head>
+            <script type="application/ld+json">
+              {
+                "@context": "https://schema.org",
+                "@type": "Recipe",
+                "name": "Chocolate Chip Cookies",
+                "description": "Classic homemade cookies.",
+                "recipeIngredient": ["2 cups flour", "1 cup chocolate chips", "1 cup sugar"],
+                "recipeInstructions": [
+                  { "@type": "HowToStep", "text": "Mix dry ingredients." },
+                  { "@type": "HowToStep", "text": "Bake at 350F for 10 minutes." }
+                ]
+              }
+            </script>
+          </head>
+          <body>Mock Recipe Page</body>
+        </html>
+      `
+    };
+  }
+  return originalFetch(url, options);
+};
 
 // Helper to run email shield test
 async function runEmailTest(email, checkDns = 'false') {
@@ -250,6 +318,53 @@ async function runDnsTest(domainVal) {
   console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
 }
 
+// Helper to run Schema Extractor test
+async function runSchemaTest(targetUrl) {
+  const req = {
+    method: 'GET',
+    query: { url: targetUrl }
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => {
+      res.headers[name] = val;
+    },
+    status: (code) => {
+      res.status_code = code;
+      return res;
+    },
+    json: (data) => {
+      res.body = data;
+      return res;
+    },
+    send: (data) => {
+      res.body = data;
+      return res;
+    },
+    end: () => {
+      return res;
+    }
+  };
+
+  await schemaHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`SCHEMA TEST: ${targetUrl}`);
+  console.log(`STATUS: ${res.status_code}`);
+  
+  if (res.body && res.body.raw_schemas) {
+    const rawCount = res.body.raw_schemas.length;
+    console.log(`RESPONSE:`, JSON.stringify({
+      ...res.body,
+      raw_schemas: `[Array of ${rawCount} raw schema blocks]`
+    }, null, 2));
+  } else {
+    console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+  }
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -299,6 +414,14 @@ async function main() {
   await runDnsTest('https://github.com/some/path'); // GitHub URL parsing
   await runDnsTest('not-a-valid-domain-12345.xyz'); // Invalid domain
   await runDnsTest(null); // Missing parameter
+
+  // SECTION 7: SCHEMA EXTRACTOR TESTS
+  console.log("\n>>> Running Structured Schema JSON-LD Parser tests...");
+  await runSchemaTest('https://mock-schema-test.com/product'); // Mock Product schema
+  await runSchemaTest('https://mock-schema-test.com/recipe'); // Mock Recipe schema
+  await runSchemaTest('https://example.com'); // Has no schemas
+  await runSchemaTest('not-a-valid-url');
+  await runSchemaTest(null);
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");
