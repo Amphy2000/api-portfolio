@@ -6,6 +6,7 @@ import previewHandler from './api/link-preview.js';
 import dnsHandler from './api/dns-lookup.js';
 import schemaHandler from './api/schema-extractor.js';
 import passwordHandler from './api/password-validator.js';
+import uaHandler from './api/ua-parser.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
@@ -405,6 +406,47 @@ async function runPasswordTest(method, payload) {
   console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
 }
 
+// Helper to run User-Agent Parser test
+async function runUaTest(uaVal) {
+  const req = {
+    method: 'GET',
+    query: uaVal ? { ua: uaVal } : {},
+    headers: {
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    }
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => {
+      res.headers[name] = val;
+    },
+    status: (code) => {
+      res.status_code = code;
+      return res;
+    },
+    json: (data) => {
+      res.body = data;
+      return res;
+    },
+    send: (data) => {
+      res.body = data;
+      return res;
+    },
+    end: () => {
+      return res;
+    }
+  };
+
+  await uaHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`UA TEST: ${uaVal || 'AUTO (Detected Client UA)'}`);
+  console.log(`STATUS: ${res.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -470,6 +512,13 @@ async function main() {
   await runPasswordTest('GET', { hash: 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d' }); // SHA-1 of 'hello' (compromised)
   await runPasswordTest('GET', { hash: 'invalid-hash' }); // Invalid format
   await runPasswordTest('GET', null); // Missing parameters
+
+  // SECTION 9: USER-AGENT PARSER TESTS
+  console.log("\n>>> Running User-Agent Parser & Device Detector tests...");
+  await runUaTest('Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'); // iOS Safari Mobile
+  await runUaTest('Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'); // Android Chrome Mobile
+  await runUaTest('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'); // Googlebot
+  await runUaTest(null); // Fallback to headers
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");

@@ -10,6 +10,7 @@
   "dependencies": {
     "bwip-js": "^3.4.3",
     "cheerio": "^1.2.0",
-    "turndown": "^7.2.4"
+    "turndown": "^7.2.4",
+    "ua-parser-js": "^2.0.10"
   }
 }
