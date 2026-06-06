@@ -1,5 +1,6 @@
 import emailHandler from './api/email-shield.js';
 import ipHandler from './api/ip-lookup.js';
+import scraperHandler from './api/scraper.js';
 
 // Helper to run email shield test
 async function runEmailTest(email, checkDns = 'false') {
@@ -84,6 +85,54 @@ async function runIpTest(ipVal) {
   console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
 }
 
+// Helper to run Web Scraper test
+async function runScraperTest(targetUrl, mode = 'standard') {
+  const req = {
+    method: 'GET',
+    query: { url: targetUrl, mode }
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => {
+      res.headers[name] = val;
+    },
+    status: (code) => {
+      res.status_code = code;
+      return res;
+    },
+    json: (data) => {
+      res.body = data;
+      return res;
+    },
+    send: (data) => {
+      res.body = data;
+      return res;
+    },
+    end: () => {
+      return res;
+    }
+  };
+
+  await scraperHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`SCRAPER TEST: ${targetUrl} (mode=${mode})`);
+  console.log(`STATUS: ${res.status_code}`);
+  
+  // Truncate markdown snippet for cleaner logging
+  if (res.body && res.body.markdown) {
+    const snippet = res.body.markdown.substring(0, 300) + '... [TRUNCATED]';
+    console.log(`RESPONSE:`, JSON.stringify({
+      ...res.body,
+      markdown: snippet
+    }, null, 2));
+  } else {
+    console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+  }
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -100,17 +149,16 @@ async function main() {
 
   // SECTION 2: IP LOOKUP TESTS
   console.log("\n>>> Running IP Geolocation & VPN Detector tests...");
-  // Test 2.1: Query Google Public DNS (expect Google LLC and datacenter detection)
   await runIpTest('8.8.8.8');
-  
-  // Test 2.2: Query Cloudflare Public DNS (expect Cloudflare ISP and datacenter detection)
   await runIpTest('1.1.1.1');
-
-  // Test 2.3: Query invalid IP address (expect 400 Bad Request)
   await runIpTest('not-an-ip');
-
-  // Test 2.4: Auto-detect IP (expect local lookup fallback to 8.8.8.8 because of local ip headers)
   await runIpTest(null);
+
+  // SECTION 3: WEB SCRAPER TESTS
+  console.log("\n>>> Running AI Web Scraper & Markdown Extractor tests...");
+  await runScraperTest('https://example.com');
+  await runScraperTest('https://example.com', 'text_only');
+  await runScraperTest('not-a-valid-url');
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");

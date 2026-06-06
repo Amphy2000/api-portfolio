@@ -8,6 +8,8 @@
     "start": "vercel dev"
   },
   "dependencies": {
-    "bwip-js": "^3.4.3"
+    "bwip-js": "^3.4.3",
+    "cheerio": "^1.2.0",
+    "turndown": "^7.2.4"
   }
 }
