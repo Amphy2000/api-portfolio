@@ -1,6 +1,7 @@
 {
   "name": "api-portfolio",
   "version": "1.0.0",
+  "type": "module",
   "description": "API Portfolio hosted on Vercel",
   "main": "api/barcode.js",
   "scripts": {
