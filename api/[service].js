@@ -53,9 +53,11 @@ export default async function handler(req, res) {
   // Verify request is from our own dashboard website
   const isFromPlayground = (referer && referer.includes(host)) || (origin && origin.includes(host));
 
-  // Verify request is routed via RapidAPI gateway
-  const expectedSecret = process.env.RAPIDAPI_PROXY_SECRET;
-  const isFromRapidAPI = expectedSecret && proxySecret === expectedSecret;
+  // Verify request is routed via RapidAPI gateway (supports single secret or comma-separated list of secrets)
+  const expectedSecrets = process.env.RAPIDAPI_PROXY_SECRET
+    ? process.env.RAPIDAPI_PROXY_SECRET.split(',').map(s => s.trim())
+    : [];
+  const isFromRapidAPI = expectedSecrets.length > 0 && expectedSecrets.includes(proxySecret);
 
   if (!isLocal && !isFromPlayground && !isFromRapidAPI) {
     return res.status(401).json({
