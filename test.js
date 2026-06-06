@@ -10,6 +10,7 @@ import uaHandler from './api/_ua-parser.js';
 import exchangeRatesHandler from './api/_exchange-rates.js';
 import shortenHandler from './api/_shorten.js';
 import redirectHandler from './api/_redirect.js';
+import fuelTrackerHandler from './api/_fuel-tracker.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
@@ -634,6 +635,66 @@ async function runShortenerTests() {
   console.log(`RESPONSE:`, JSON.stringify(errRes.body, null, 2));
 }
 
+// Helper to run Fuel Price Tracker tests
+async function runFuelTest(state, type) {
+  const query = {};
+  if (state) query.state = state;
+  if (type) query.type = type;
+
+  const req = {
+    method: 'GET',
+    query
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { res.headers[name] = val; },
+    status: (code) => { res.status_code = code; return res; },
+    json: (data) => { res.body = data; return res; },
+    send: (data) => { res.body = data; return res; },
+    end: () => { return res; }
+  };
+
+  await fuelTrackerHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`FUEL PRICE TEST: state=${state || 'NONE'}, type=${type || 'NONE'}`);
+  console.log(`STATUS: ${res.status_code}`);
+
+  if (res.body && res.body.state_averages && !state && !type) {
+    // Truncate state averages to print only first 3 states to avoid massive spam
+    const codes = Object.keys(res.body.state_averages);
+    const slicedStates = {};
+    codes.slice(0, 3).forEach(c => {
+      slicedStates[c] = res.body.state_averages[c];
+    });
+    console.log(`RESPONSE:`, JSON.stringify({
+      ...res.body,
+      state_averages: {
+        ...slicedStates,
+        _plus_more: `${codes.length - 3} other states...`
+      }
+    }, null, 2));
+  } else if (res.body && res.body.state_averages && type) {
+    // Truncate state averages when type is requested
+    const codes = Object.keys(res.body.state_averages);
+    const slicedStates = {};
+    codes.slice(0, 3).forEach(c => {
+      slicedStates[c] = res.body.state_averages[c];
+    });
+    console.log(`RESPONSE:`, JSON.stringify({
+      ...res.body,
+      state_averages: {
+        ...slicedStates,
+        _plus_more: `${codes.length - 3} other states...`
+      }
+    }, null, 2));
+  } else {
+    console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+  }
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -717,6 +778,15 @@ async function main() {
 
   // SECTION 11: URL SHORTENER & LINK ANALYTICS TESTS
   await runShortenerTests();
+
+  // SECTION 12: PROGRAMMATIC SEO FUEL PRICE TRACKER TESTS
+  console.log("\n>>> Running Fuel Price Tracker tests...");
+  await runFuelTest(null, null); // Default: return all averages and national averages
+  await runFuelTest('TX', null); // Search by state code TX
+  await runFuelTest('California', 'diesel'); // Search by state full name and type diesel
+  await runFuelTest(null, 'regular'); // Filter all states by type regular
+  await runFuelTest('INVALID_STATE', null); // Invalid state error handling
+  await runFuelTest('NY', 'invalid_type'); // Invalid type error handling
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");

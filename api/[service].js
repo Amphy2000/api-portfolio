@@ -12,6 +12,7 @@ import shortenHandler from './_shorten.js';
 import redirectHandler from './_redirect.js';
 import barcodeHandler from './_barcode.js';
 import healthHandler from './_health.js';
+import fuelTrackerHandler from './_fuel-tracker.js';
 
 const handlers = {
   'email-shield': emailHandler,
@@ -27,7 +28,8 @@ const handlers = {
   'shorten': shortenHandler,
   'redirect': redirectHandler,
   'barcode': barcodeHandler,
-  'health': healthHandler
+  'health': healthHandler,
+  'fuel-prices': fuelTrackerHandler
 };
 
 export default async function handler(req, res) {
