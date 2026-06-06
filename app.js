@@ -1,5 +1,31 @@
 /* app.js */
 
+// =========================================================================
+// CONFIGURATION: UPDATE YOUR RAPIDAPI LINKS HERE
+// =========================================================================
+// Replace these values with your actual RapidAPI page links once published.
+// If any link is missing or set to '', it will automatically fall back to
+// your main developer profile page so users never hit a 404 error page.
+
+const RAPIDAPI_PROFILE_URL = 'https://rapidapi.com/user/Amphy2000'; // Your Developer Profile Link
+
+const RAPIDAPI_LINKS = {
+  'email-shield': 'https://rapidapi.com/Amphy2000/api/email-shield1',
+  'ip-lookup': 'https://rapidapi.com/Amphy2000/api/ip-geolocation-and-vpn-detector1',
+  'password-validator': 'https://rapidapi.com/Amphy2000/api/password-strength-and-breach-checker',
+  'scraper': 'https://rapidapi.com/Amphy2000/api/universal-web-scraper',
+  'schema-extractor': 'https://rapidapi.com/Amphy2000/api/structured-schema-json-ld-parser',
+  'link-preview': 'https://rapidapi.com/Amphy2000/api/rich-link-preview-and-og-tag-extractor',
+  'ua-parser': 'https://rapidapi.com/Amphy2000/api/user-agent-parser-and-device-detector',
+  'fuel-prices': 'https://rapidapi.com/Amphy2000/api/programmatic-seo-fuel-price-tracker',
+  'barcode': 'https://rapidapi.com/Amphy2000/api/barcode-and-qr-code-generator',
+  'dns-lookup': 'https://rapidapi.com/Amphy2000/api/dns-record-lookup-and-domain-diagnostics',
+  'exchange-rates': 'https://rapidapi.com/Amphy2000/api/multi-currency-cryptocurrency-exchange-rates',
+  'shorten': 'https://rapidapi.com/Amphy2000/api/url-shortener-and-link-analytics',
+  'redirect': 'https://rapidapi.com/Amphy2000/api/url-shortener-and-link-analytics', // Shares shorten page
+  'health': 'https://rapidapi.com/Amphy2000/api/url-shortener-and-link-analytics'
+};
+
 // All 15 APIs config schema
 const APIS = [
   // SECURITY & TRUST
@@ -9,7 +35,7 @@ const APIS = [
     category: 'security',
     method: 'GET',
     description: 'Detects disposable/temporary email addresses, whitelists major email providers, scans recursive subdomains, and runs active DNS MX records checks to prevent fake user signups.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/email-shield1',
+    rapidApiUrl: RAPIDAPI_LINKS['email-shield'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'email', label: 'Email Address', type: 'text', placeholder: 'user@disposabledomain.com', default: 'hello@dispostable.com' },
       { name: 'check_dns', label: 'Perform Live MX DNS Lookup', type: 'checkbox', default: false }
@@ -21,7 +47,7 @@ const APIS = [
     category: 'security',
     method: 'GET',
     description: 'Resolves details about an IP including country, city, ISP coordinates, hosting datacenter (ASN scanner), and checks exit node lists to flag active VPN/proxy bots.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/ip-geolocation-and-vpn-detector1',
+    rapidApiUrl: RAPIDAPI_LINKS['ip-lookup'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'ip', label: 'IP Address', type: 'text', placeholder: '8.8.8.8 (Leave blank for client IP)', default: '' }
     ]
@@ -32,7 +58,7 @@ const APIS = [
     category: 'security',
     method: 'POST',
     description: 'Scores password complexity rules and evaluates credentials using privacy-preserving k-Anonymity checks (sending 5 SHA-1 characters) against 800M+ compromised accounts.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/password-strength-and-breach-checker',
+    rapidApiUrl: RAPIDAPI_LINKS['password-validator'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'password', label: 'Password to Check', type: 'text', placeholder: 'Type password here...', default: 'P@ssword123!' }
     ]
@@ -45,7 +71,7 @@ const APIS = [
     category: 'seo',
     method: 'GET',
     description: 'Fetches raw web markup, purges layout noise (cooke banners, navbars, trackers), and translates pages into clean Markdown optimized for LLM token ingestion.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/universal-web-scraper',
+    rapidApiUrl: RAPIDAPI_LINKS['scraper'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'url', label: 'Target Webpage URL', type: 'text', placeholder: 'https://example.com', default: 'https://example.com' },
       { name: 'mode', label: 'Extraction Mode', type: 'select', default: 'standard', options: ['standard', 'text_only'] }
@@ -57,7 +83,7 @@ const APIS = [
     category: 'seo',
     method: 'GET',
     description: 'Crawls pages, extracts all embedded applications/ld+json metadata blocks, normalizes properties, and supports Products, Recipes, Article and Event schema tags.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/structured-schema-json-ld-parser',
+    rapidApiUrl: RAPIDAPI_LINKS['schema-extractor'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'url', label: 'Webpage URL', type: 'text', placeholder: 'https://www.youtube.com', default: 'https://www.youtube.com' }
     ]
@@ -68,7 +94,7 @@ const APIS = [
     category: 'seo',
     method: 'GET',
     description: 'Scrapes webpage targets for social previews, pulling OpenGraph, Twitter card tags, page titles, and resolves relative image routes to absolute URLs.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/rich-link-preview-and-og-tag-extractor',
+    rapidApiUrl: RAPIDAPI_LINKS['link-preview'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'url', label: 'Target URL', type: 'text', placeholder: 'https://github.com', default: 'https://github.com' }
     ]
@@ -79,7 +105,7 @@ const APIS = [
     category: 'seo',
     method: 'GET',
     description: 'Deconstructs User-Agent headers to verify browser details, operating systems, hardware platforms, and detect search crawlers/scraping engines.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/user-agent-parser-and-device-detector',
+    rapidApiUrl: RAPIDAPI_LINKS['ua-parser'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'ua', label: 'User-Agent String', type: 'text', placeholder: 'Mozilla/5.0... (Leave blank for current browser)', default: '' }
     ]
@@ -90,7 +116,7 @@ const APIS = [
     category: 'seo',
     method: 'GET',
     description: 'Scrapes live state average gas/diesel prices daily from the AAA Gas Registry. Compares state benchmarks against national benchmarks.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/programmatic-seo-fuel-price-tracker',
+    rapidApiUrl: RAPIDAPI_LINKS['fuel-prices'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'state', label: 'US State Name or Abbreviation', type: 'text', placeholder: 'TX, California, etc. (Leave blank for all)', default: 'TX' },
       { name: 'type', label: 'Fuel Grade Filter', type: 'select', default: 'all', options: ['all', 'regular', 'midgrade', 'premium', 'diesel'] }
@@ -104,7 +130,7 @@ const APIS = [
     category: 'utilities',
     method: 'GET',
     description: 'Renders high-quality visual outputs for barcodes (Code128, EAN13, PDF417) and QR Codes as high-speed cached PNG buffers.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/barcode-and-qr-code-generator',
+    rapidApiUrl: RAPIDAPI_LINKS['barcode'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'text', label: 'Payload Data', type: 'text', placeholder: 'Enter code payload...', default: 'Amphy Suite' },
       { name: 'type', label: 'Code Format', type: 'select', default: 'code128', options: ['code128', 'qrcode', 'ean13', 'pdf417'] }
@@ -116,7 +142,7 @@ const APIS = [
     category: 'utilities',
     method: 'GET',
     description: 'Queries domain records (A, AAAA, MX, TXT, NS, CNAME) in parallel and parses active SPF and DMARC rules for server security audits.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/dns-record-lookup-and-domain-diagnostics',
+    rapidApiUrl: RAPIDAPI_LINKS['dns-lookup'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'domain', label: 'Target Domain Name', type: 'text', placeholder: 'example.com', default: 'github.com' }
     ]
@@ -127,7 +153,7 @@ const APIS = [
     category: 'utilities',
     method: 'GET',
     description: 'Fetches global fiat rates from European Central Bank feeds and live CoinGecko crypto valuations with relative base currency conversions.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/multi-currency-cryptocurrency-exchange-rates',
+    rapidApiUrl: RAPIDAPI_LINKS['exchange-rates'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'base', label: 'Base Currency / Crypto Ticker', type: 'text', placeholder: 'USD, EUR, BTC, etc.', default: 'USD' },
       { name: 'symbols', label: 'Target Tickers (Comma separated)', type: 'text', placeholder: 'EUR,GBP,BTC,ETH,SOL', default: 'EUR,GBP,BTC,ETH,SOL' }
@@ -139,7 +165,7 @@ const APIS = [
     category: 'utilities',
     method: 'POST',
     description: 'Creates a compressed 6-character redirect slug stored persistently in Supabase. Accepts analytics queries via GET /api/shorten?slug=...',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/url-shortener-and-link-analytics',
+    rapidApiUrl: RAPIDAPI_LINKS['shorten'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'url', label: 'Long Webpage URL', type: 'text', placeholder: 'https://github.com/Amphy2000', default: 'https://github.com/Amphy2000' }
     ]
@@ -150,7 +176,7 @@ const APIS = [
     category: 'utilities',
     method: 'GET',
     description: 'Resolves shortened slugs and issues a 302 redirect header while logging visitor properties (referrers, browsers) in a background thread.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/url-shortener-and-link-analytics', // Shares RapidAPI page
+    rapidApiUrl: RAPIDAPI_LINKS['redirect'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'slug', label: 'Slug Code', type: 'text', placeholder: 'e.g. mkuR35', default: '' }
     ]
@@ -161,7 +187,7 @@ const APIS = [
     category: 'utilities',
     method: 'GET',
     description: 'Verifies the health and latency properties of the active database connectors, caches, and Vercel serverless worker nodes.',
-    rapidApiUrl: 'https://rapidapi.com/Amphy2000/api/url-shortener-and-link-analytics', // Shares placeholder
+    rapidApiUrl: RAPIDAPI_LINKS['health'] || RAPIDAPI_PROFILE_URL,
     inputs: []
   }
 ];
