@@ -2,6 +2,7 @@ import emailHandler from './api/email-shield.js';
 import ipHandler from './api/ip-lookup.js';
 import scraperHandler from './api/scraper.js';
 import vatHandler from './api/vat-validator.js';
+import previewHandler from './api/link-preview.js';
 
 // Helper to run email shield test
 async function runEmailTest(email, checkDns = 'false') {
@@ -172,6 +173,44 @@ async function runVatTest(vatVal) {
   console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
 }
 
+// Helper to run Link Preview test
+async function runPreviewTest(targetUrl) {
+  const req = {
+    method: 'GET',
+    query: { url: targetUrl }
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => {
+      res.headers[name] = val;
+    },
+    status: (code) => {
+      res.status_code = code;
+      return res;
+    },
+    json: (data) => {
+      res.body = data;
+      return res;
+    },
+    send: (data) => {
+      res.body = data;
+      return res;
+    },
+    end: () => {
+      return res;
+    }
+  };
+
+  await previewHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`PREVIEW TEST: ${targetUrl}`);
+  console.log(`STATUS: ${res.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -207,6 +246,13 @@ async function main() {
   await runVatTest('US123456789'); // Invalid country code
   await runVatTest('123456789'); // Missing country code
   await runVatTest(null); // Missing parameter
+
+  // SECTION 5: LINK PREVIEW TESTS
+  console.log("\n>>> Running Rich Link Preview & OG Extractor tests...");
+  await runPreviewTest('https://example.com');
+  await runPreviewTest('https://github.com');
+  await runPreviewTest('not-a-valid-url');
+  await runPreviewTest(null);
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");
