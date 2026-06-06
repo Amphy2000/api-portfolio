@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   const referer = req.headers['referer'] || '';
   const origin = req.headers['origin'] || '';
   const host = req.headers['host'] || '';
-  const proxySecret = req.headers['x-rapidapi-proxy-secret'] || '';
+  const proxySecret = req.headers['x-rapidapi-proxy-secret'] || req.headers['x-amphy-secret'] || '';
 
   const isLocal = host.includes('localhost') || host.includes('127.0.0.1') || host.includes('3000');
   
