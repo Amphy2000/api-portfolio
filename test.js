@@ -1,6 +1,7 @@
 import emailHandler from './api/email-shield.js';
 import ipHandler from './api/ip-lookup.js';
 import scraperHandler from './api/scraper.js';
+import vatHandler from './api/vat-validator.js';
 
 // Helper to run email shield test
 async function runEmailTest(email, checkDns = 'false') {
@@ -133,6 +134,44 @@ async function runScraperTest(targetUrl, mode = 'standard') {
   }
 }
 
+// Helper to run VAT Validator test
+async function runVatTest(vatVal) {
+  const req = {
+    method: 'GET',
+    query: vatVal ? { vat: vatVal } : {}
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => {
+      res.headers[name] = val;
+    },
+    status: (code) => {
+      res.status_code = code;
+      return res;
+    },
+    json: (data) => {
+      res.body = data;
+      return res;
+    },
+    send: (data) => {
+      res.body = data;
+      return res;
+    },
+    end: () => {
+      return res;
+    }
+  };
+
+  await vatHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`VAT TEST: ${vatVal || 'MISSING_PARAM'}`);
+  console.log(`STATUS: ${res.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -159,6 +198,15 @@ async function main() {
   await runScraperTest('https://example.com');
   await runScraperTest('https://example.com', 'text_only');
   await runScraperTest('not-a-valid-url');
+
+  // SECTION 4: VAT VALIDATOR TESTS
+  console.log("\n>>> Running VAT & Company Validator tests...");
+  await runVatTest('IE6388047V'); // Valid Google Ireland
+  await runVatTest('GR998370712'); // Greek VAT mapping
+  await runVatTest('DE123456789'); // Invalid VAT
+  await runVatTest('US123456789'); // Invalid country code
+  await runVatTest('123456789'); // Missing country code
+  await runVatTest(null); // Missing parameter
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");
