@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amphy Premium API Suite — Interactive Playgrounds & Developer Hub</title>
+  <meta name="description" content="Access 16 high-performance, developer-first microservices including IP Geolocation, Email Shield, Schema Extractor, and US Fuel Price Tracker. Test live requests with zero key requirements.">
+  <meta name="keywords" content="API Suite, Developer APIs, Geolocation API, Email Validator, Fuel Price API, Web Scraper, DNS Checker, Schema Extractor, Barcode Generator">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Amphy Premium API Suite — Interactive Playgrounds & Developer Hub">
+  <meta property="og:description" content="Access 16 high-performance, developer-first microservices including IP Geolocation, Email Shield, Schema Extractor, and US Fuel Price Tracker. Test live requests with zero key requirements.">
+  <meta property="og:type" content="website">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <!-- Glow effects -->
+  <div class="glow-bg glow-purple"></div>
+  <div class="glow-bg glow-teal"></div>
+
+  <div class="app-container">
+    
+    <!-- Sidebar navigation -->
+    <aside class="sidebar">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <!-- Logo Icon -->
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 22h20L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z" />
+          </svg>
+        </div>
+        <span class="brand-name">Amphy APIs</span>
+      </div>
+
+      <!-- Search Box -->
+      <div class="search-container">
+        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="api-search" class="search-input" placeholder="Search 16 APIs...">
+      </div>
+
+      <!-- Security Category -->
+      <div class="nav-category">
+        <h3 class="category-title">Security & Trust</h3>
+        <ul class="api-list" id="category-security">
+          <!-- Populated by JavaScript -->
+        </ul>
+      </div>
+
+      <!-- SEO & Scraping Category -->
+      <div class="nav-category">
+        <h3 class="category-title">SEO & Web Scraping</h3>
+        <ul class="api-list" id="category-seo">
+          <!-- Populated by JavaScript -->
+        </ul>
+      </div>
+
+      <!-- Utilities & Commerce Category -->
+      <div class="nav-category">
+        <h3 class="category-title">Utilities & Commerce</h3>
+        <ul class="api-list" id="category-utilities">
+          <!-- Populated by JavaScript -->
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top header and dashboard statistics -->
+      <header class="dashboard-header">
+        <div class="title-area">
+          <h1 id="main-heading">Amphy Premium API Suite</h1>
+          <p id="main-subheading">Test our production-ready microservices directly inside your browser.</p>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">16</div>
+            <div class="stat-label">Active APIs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">&lt;2ms</div>
+            <div class="stat-label">Avg Latency</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Uptime SLA</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Sandbox Grid (Playground Form and Output Console) -->
+      <section class="sandbox-grid" aria-label="API Interactive Sandbox">
+        
+        <!-- Left Pane: Parameter Form -->
+        <article class="glass-card" id="playground-panel">
+          <div class="panel-header">
+            <h2 class="panel-title" id="panel-title">
+              <!-- Set by JS -->
+              Loading API...
+            </h2>
+            <span class="info-badge badge-get" id="panel-method">GET</span>
+          </div>
+          
+          <p class="panel-desc" id="panel-desc">
+            <!-- Set by JS -->
+            Select an API from the sidebar to begin testing.
+          </p>
+
+          <!-- Dynamic Form Inputs Container -->
+          <form id="playground-form" onsubmit="return false;">
+            <div id="dynamic-inputs">
+              <!-- Set dynamically by JS -->
+            </div>
+            
+            <div class="action-buttons">
+              <button type="submit" id="btn-run" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px;">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Send Request
+              </button>
+              <a href="#" id="btn-subscribe" target="_blank" class="btn btn-rapid">
+                <svg width="16" height="16" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h2v2h-2v-2zm0-10h2v8h-2V6z" />
+                </svg>
+                RapidAPI Page
+              </a>
+            </div>
+          </form>
+
+          <div class="api-info-footer">
+            <div class="info-item">
+              <strong>Relative Endpoint:</strong>
+              <code id="info-path" style="font-family: var(--font-code); color: var(--secondary);">/api/health</code>
+            </div>
+            <div class="info-item">
+              <strong>RapidAPI Host:</strong>
+              <code id="info-host" style="font-family: var(--font-code); color: var(--text-muted);">amphy-apis.p.rapidapi.com</code>
+            </div>
+          </div>
+        </article>
+
+        <!-- Right Pane: Code/Response Output Console -->
+        <article class="glass-card" id="console-panel" style="padding-top: 1.25rem;">
+          <div class="console-header">
+            <ul class="tabs-list" id="console-tabs">
+              <li><button type="button" class="tab-btn active" data-tab="json">Response JSON</button></li>
+              <li><button type="button" class="tab-btn" data-tab="js">JavaScript (Fetch)</button></li>
+              <li><button type="button" class="tab-btn" data-tab="python">Python (Requests)</button></li>
+              <li><button type="button" class="tab-btn" data-tab="curl">cURL</button></li>
+            </ul>
+            
+            <div class="console-actions">
+              <button type="button" id="btn-copy" class="icon-btn tooltip" aria-label="Copy code to clipboard">
+                <!-- Copy Icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Output Pre Container -->
+          <div class="console-body" id="console-container">
+            <div class="loader-overlay" id="loading-spinner">
+              <div class="spinner"></div>
+              <div class="loader-text">Executing request...</div>
+            </div>
+            <pre><code class="language-json" id="console-output">{
+  "info": "Submit the form to view real-time API response"
+}</code></pre>
+          </div>
+
+          <!-- Image Display Box (For Barcode generation outputs) -->
+          <div class="console-img-output" id="console-img-container">
+            <img id="console-image" src="" alt="API Output Image">
+          </div>
+        </article>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- JavaScript logic -->
+  <script src="/app.js"></script>
+</body>
+</html>
