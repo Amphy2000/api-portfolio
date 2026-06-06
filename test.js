@@ -3,6 +3,7 @@ import ipHandler from './api/ip-lookup.js';
 import scraperHandler from './api/scraper.js';
 import vatHandler from './api/vat-validator.js';
 import previewHandler from './api/link-preview.js';
+import dnsHandler from './api/dns-lookup.js';
 
 // Helper to run email shield test
 async function runEmailTest(email, checkDns = 'false') {
@@ -211,6 +212,44 @@ async function runPreviewTest(targetUrl) {
   console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
 }
 
+// Helper to run DNS Lookup test
+async function runDnsTest(domainVal) {
+  const req = {
+    method: 'GET',
+    query: { domain: domainVal }
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => {
+      res.headers[name] = val;
+    },
+    status: (code) => {
+      res.status_code = code;
+      return res;
+    },
+    json: (data) => {
+      res.body = data;
+      return res;
+    },
+    send: (data) => {
+      res.body = data;
+      return res;
+    },
+    end: () => {
+      return res;
+    }
+  };
+
+  await dnsHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`DNS TEST: ${domainVal || 'MISSING_PARAM'}`);
+  console.log(`STATUS: ${res.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -253,6 +292,13 @@ async function main() {
   await runPreviewTest('https://github.com');
   await runPreviewTest('not-a-valid-url');
   await runPreviewTest(null);
+
+  // SECTION 6: DNS LOOKUP TESTS
+  console.log("\n>>> Running DNS Record Lookup & Diagnostics tests...");
+  await runDnsTest('gmail.com'); // Google Mail (should have SPF and DMARC config)
+  await runDnsTest('https://github.com/some/path'); // GitHub URL parsing
+  await runDnsTest('not-a-valid-domain-12345.xyz'); // Invalid domain
+  await runDnsTest(null); // Missing parameter
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");
