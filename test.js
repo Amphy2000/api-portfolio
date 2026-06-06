@@ -8,6 +8,8 @@ import schemaHandler from './api/schema-extractor.js';
 import passwordHandler from './api/password-validator.js';
 import uaHandler from './api/ua-parser.js';
 import exchangeRatesHandler from './api/exchange-rates.js';
+import shortenHandler from './api/shorten.js';
+import redirectHandler from './api/redirect.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
@@ -507,6 +509,131 @@ async function runExchangeRatesTest(base, symbols) {
   }
 }
 
+// Helper to run URL Shortener & Link Analytics test
+async function runShortenerTests() {
+  console.log(`\n----------------------------------------`);
+  console.log(`URL SHORTENER & ANALYTICS TESTS`);
+  
+  // 1. Create short link
+  const createReq = {
+    method: 'POST',
+    body: { url: 'https://example.com/analytics-test-target-page' },
+    headers: { host: 'localhost:3000' }
+  };
+  const createRes = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { createRes.headers[name] = val; },
+    status: (code) => { createRes.status_code = code; return createRes; },
+    json: (data) => { createRes.body = data; return createRes; }
+  };
+
+  await shortenHandler(createReq, createRes);
+  console.log(`\n1. CREATE SHORT URL:`);
+  console.log(`STATUS: ${createRes.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(createRes.body, null, 2));
+
+  const slug = createRes.body?.slug;
+  if (!slug) {
+    console.log(`Aborting redirect/analytics tests because slug creation failed.`);
+    return;
+  }
+
+  // 2. Perform redirect (click 1)
+  const redirReq1 = {
+    method: 'GET',
+    query: { slug },
+    headers: {
+      'referer': 'https://twitter.com/share',
+      'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Chrome/120.0.0.0 Safari/604.1'
+    }
+  };
+  const redirRes1 = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { redirRes1.headers[name] = val; },
+    status: (code) => { redirRes1.status_code = code; return redirRes1; },
+    json: (data) => { redirRes1.body = data; return redirRes1; },
+    writeHead: (code, headers) => {
+      redirRes1.status_code = code;
+      redirRes1.headers = { ...redirRes1.headers, ...headers };
+    },
+    end: () => {}
+  };
+
+  await redirectHandler(redirReq1, redirRes1);
+  console.log(`\n2. REDIRECT CLICK 1 (from Twitter/iOS Safari):`);
+  console.log(`STATUS: ${redirRes1.status_code}`);
+  console.log(`REDIRECT LOCATION: ${redirRes1.headers.Location}`);
+
+  // 3. Perform redirect (click 2)
+  const redirReq2 = {
+    method: 'GET',
+    query: { slug },
+    headers: {
+      'referer': 'https://github.com/project',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Firefox/120.0'
+    }
+  };
+  const redirRes2 = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { redirRes2.headers[name] = val; },
+    status: (code) => { redirRes2.status_code = code; return redirRes2; },
+    json: (data) => { redirRes2.body = data; return redirRes2; },
+    writeHead: (code, headers) => {
+      redirRes2.status_code = code;
+      redirRes2.headers = { ...redirRes2.headers, ...headers };
+    },
+    end: () => {}
+  };
+
+  await redirectHandler(redirReq2, redirRes2);
+  console.log(`\n3. REDIRECT CLICK 2 (from GitHub/Windows Firefox):`);
+  console.log(`STATUS: ${redirRes2.status_code}`);
+  console.log(`REDIRECT LOCATION: ${redirRes2.headers.Location}`);
+
+  // 4. Fetch analytics
+  const statsReq = {
+    method: 'GET',
+    query: { slug }
+  };
+  const statsRes = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { statsRes.headers[name] = val; },
+    status: (code) => { statsRes.status_code = code; return statsRes; },
+    json: (data) => { statsRes.body = data; return statsRes; }
+  };
+
+  await shortenHandler(statsReq, statsRes);
+  console.log(`\n4. GET ANALYTICS FOR SLUG "${slug}":`);
+  console.log(`STATUS: ${statsRes.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(statsRes.body, null, 2));
+
+  // 5. Test validation errors
+  const errReq = {
+    method: 'POST',
+    body: { url: 'not-a-valid-url' }
+  };
+  const errRes = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { errRes.headers[name] = val; },
+    status: (code) => { errRes.status_code = code; return errRes; },
+    json: (data) => { errRes.body = data; return errRes; }
+  };
+  await shortenHandler(errReq, errRes);
+  console.log(`\n5. CREATE WITH INVALID URL:`);
+  console.log(`STATUS: ${errRes.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(errRes.body, null, 2));
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -587,6 +714,9 @@ async function main() {
   await runExchangeRatesTest('BTC', 'USD,EUR,GBP'); // Base Crypto, filtered symbols
   await runExchangeRatesTest('INVALID', 'USD'); // Invalid base currency
   await runExchangeRatesTest('USD', 'INVALID_SYM'); // Invalid symbols
+
+  // SECTION 11: URL SHORTENER & LINK ANALYTICS TESTS
+  await runShortenerTests();
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");

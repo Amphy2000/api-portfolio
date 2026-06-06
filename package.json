@@ -8,6 +8,7 @@
     "start": "vercel dev"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.107.0",
     "bwip-js": "^3.4.3",
     "cheerio": "^1.2.0",
     "turndown": "^7.2.4",
