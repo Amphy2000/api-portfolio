@@ -1,15 +1,15 @@
-import emailHandler from './api/email-shield.js';
-import ipHandler from './api/ip-lookup.js';
-import scraperHandler from './api/scraper.js';
-import vatHandler from './api/vat-validator.js';
-import previewHandler from './api/link-preview.js';
-import dnsHandler from './api/dns-lookup.js';
-import schemaHandler from './api/schema-extractor.js';
-import passwordHandler from './api/password-validator.js';
-import uaHandler from './api/ua-parser.js';
-import exchangeRatesHandler from './api/exchange-rates.js';
-import shortenHandler from './api/shorten.js';
-import redirectHandler from './api/redirect.js';
+import emailHandler from './api/_email-shield.js';
+import ipHandler from './api/_ip-lookup.js';
+import scraperHandler from './api/_scraper.js';
+import vatHandler from './api/_vat-validator.js';
+import previewHandler from './api/_link-preview.js';
+import dnsHandler from './api/_dns-lookup.js';
+import schemaHandler from './api/_schema-extractor.js';
+import passwordHandler from './api/_password-validator.js';
+import uaHandler from './api/_ua-parser.js';
+import exchangeRatesHandler from './api/_exchange-rates.js';
+import shortenHandler from './api/_shorten.js';
+import redirectHandler from './api/_redirect.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
