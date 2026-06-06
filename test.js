@@ -5,6 +5,7 @@ import vatHandler from './api/vat-validator.js';
 import previewHandler from './api/link-preview.js';
 import dnsHandler from './api/dns-lookup.js';
 import schemaHandler from './api/schema-extractor.js';
+import passwordHandler from './api/password-validator.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
@@ -365,6 +366,45 @@ async function runSchemaTest(targetUrl) {
   }
 }
 
+// Helper to run Password Validator test
+async function runPasswordTest(method, payload) {
+  const req = {
+    method: method,
+    query: method === 'GET' ? payload : {},
+    body: method === 'POST' ? payload : {}
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => {
+      res.headers[name] = val;
+    },
+    status: (code) => {
+      res.status_code = code;
+      return res;
+    },
+    json: (data) => {
+      res.body = data;
+      return res;
+    },
+    send: (data) => {
+      res.body = data;
+      return res;
+    },
+    end: () => {
+      return res;
+    }
+  };
+
+  await passwordHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`PASSWORD TEST: Method=${method}, Payload=${JSON.stringify(payload)}`);
+  console.log(`STATUS: ${res.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -422,6 +462,14 @@ async function main() {
   await runSchemaTest('https://example.com'); // Has no schemas
   await runSchemaTest('not-a-valid-url');
   await runSchemaTest(null);
+
+  // SECTION 8: PASSWORD VALIDATOR TESTS
+  console.log("\n>>> Running Password Strength & Breach Checker tests...");
+  await runPasswordTest('POST', { password: 'password123' }); // Compromised weak
+  await runPasswordTest('POST', { password: 'CorrectHorseBatteryStaple2026!' }); // Secure strong
+  await runPasswordTest('GET', { hash: 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d' }); // SHA-1 of 'hello' (compromised)
+  await runPasswordTest('GET', { hash: 'invalid-hash' }); // Invalid format
+  await runPasswordTest('GET', null); // Missing parameters
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");
