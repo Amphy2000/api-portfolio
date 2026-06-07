@@ -10,20 +10,21 @@
 const RAPIDAPI_PROFILE_URL = 'https://rapidapi.com/user/Amphy2000'; // Your Developer Profile Link
 
 const RAPIDAPI_LINKS = {
-  'email-shield': 'https://rapidapi.com/Amphy2000/api/email-shield1',
-  'ip-lookup': 'https://rapidapi.com/Amphy2000/api/ip-geolocation-and-vpn-detector1',
-  'password-validator': 'https://rapidapi.com/Amphy2000/api/password-strength-and-breach-checker',
-  'scraper': 'https://rapidapi.com/Amphy2000/api/universal-web-scraper',
-  'schema-extractor': 'https://rapidapi.com/Amphy2000/api/structured-schema-json-ld-parser',
-  'link-preview': 'https://rapidapi.com/Amphy2000/api/rich-link-preview-and-og-tag-extractor',
-  'ua-parser': 'https://rapidapi.com/Amphy2000/api/user-agent-parser-and-device-detector',
-  'fuel-prices': 'https://rapidapi.com/Amphy2000/api/programmatic-seo-fuel-price-tracker',
-  'barcode': 'https://rapidapi.com/Amphy2000/api/barcode-and-qr-code-generator',
-  'dns-lookup': 'https://rapidapi.com/Amphy2000/api/dns-record-lookup-and-domain-diagnostics',
-  'exchange-rates': 'https://rapidapi.com/Amphy2000/api/multi-currency-cryptocurrency-exchange-rates',
-  'shorten': 'https://rapidapi.com/Amphy2000/api/url-shortener-and-link-analytics',
-  'redirect': 'https://rapidapi.com/Amphy2000/api/url-shortener-and-link-analytics', // Shares shorten page
-  'health': 'https://rapidapi.com/Amphy2000/api/url-shortener-and-link-analytics'
+  'email-shield': 'https://rapidapi.com/amphy2000/api/disposable-burner-email-shield',
+  'ip-lookup': 'https://rapidapi.com/amphy2000/api/ip-geolocation-vpn-proxy-shield',
+  'password-validator': 'https://rapidapi.com/amphy2000/api/password-strength-breach-checker',
+  'scraper': 'https://rapidapi.com/amphy2000/api/ai-web-scraper-markdown-extractor',
+  'schema-extractor': 'https://rapidapi.com/amphy2000/api/structured-schema-json-ld-parser',
+  'link-preview': 'https://rapidapi.com/amphy2000/api/rich-link-preview-og-extractor',
+  'ua-parser': 'https://rapidapi.com/amphy2000/api/user-agent-parser-and-device-detector',
+  'fuel-prices': 'https://rapidapi.com/amphy2000/api/programmatic-seo-fuel-price-tracker',
+  'barcode': 'https://rapidapi.com/amphy2000/api/barcode-and-qr-code-generator1',
+  'dns-lookup': 'https://rapidapi.com/amphy2000/api/dns-record-lookup-domain-diagnostics',
+  'exchange-rates': 'https://rapidapi.com/amphy2000/api/multi-currency-crypto-exchange-rates-api',
+  'shorten': 'https://rapidapi.com/amphy2000/api/url-shortener-link-analytics-api',
+  'redirect': 'https://rapidapi.com/amphy2000/api/url-shortener-link-analytics-api', // Shares shorten page
+  'health': 'https://rapidapi.com/amphy2000/api/url-shortener-link-analytics-api',
+  'vat-validator': 'https://rapidapi.com/amphy2000/api/european-vat-company-validator'
 };
 
 // All 15 APIs config schema
@@ -189,6 +190,17 @@ const APIS = [
     description: 'Verifies the health and latency properties of the active database connectors, caches, and Vercel serverless worker nodes.',
     rapidApiUrl: RAPIDAPI_LINKS['health'] || RAPIDAPI_PROFILE_URL,
     inputs: []
+  },
+  {
+    key: 'vat-validator',
+    name: 'European VAT & Company Validator',
+    category: 'utilities',
+    method: 'GET',
+    description: 'Queries the official EU VIES database to validate European VAT identification numbers, verifies company active registration status, and returns company name and business address details.',
+    rapidApiUrl: RAPIDAPI_LINKS['vat-validator'] || RAPIDAPI_PROFILE_URL,
+    inputs: [
+      { name: 'vat', label: 'EU VAT Number (prefixed with country code)', type: 'text', placeholder: 'e.g. IE6388047V or DE123456789', default: 'IE6388047V' }
+    ]
   }
 ];
 
@@ -365,7 +377,8 @@ function getApiIcon(key) {
     'exchange-rates': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>',
     'shorten': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg>',
     'redirect': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>',
-    'health': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>'
+    'health': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>',
+    'vat-validator': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 8h10M7 12h4m-4 4h10"></path></svg>'
   };
   return icons[key] || '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle></svg>';
 }
