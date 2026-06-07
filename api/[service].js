@@ -59,7 +59,7 @@ export default async function handler(req, res) {
     : [];
   const isFromRapidAPI = expectedSecrets.length > 0 && expectedSecrets.includes(proxySecret);
 
-  if (!isLocal && !isFromPlayground && !isFromRapidAPI) {
+  if (!isLocal && !isFromPlayground && !isFromRapidAPI && service !== 'health') {
     return res.status(401).json({
       error: 'Direct API access is restricted.',
       message: 'To use this API in your applications, you must subscribe on RapidAPI: https://rapidapi.com/user/Amphy2000'
