@@ -16,7 +16,7 @@ const RAPIDAPI_LINKS = {
   'scraper': 'https://rapidapi.com/amphy2000/api/ai-web-scraper-markdown-extractor',
   'schema-extractor': 'https://rapidapi.com/amphy2000/api/structured-schema-json-ld-parser',
   'link-preview': 'https://rapidapi.com/amphy2000/api/rich-link-preview-og-extractor',
-  'ua-parser': 'https://rapidapi.com/amphy2000/api/user-agent-parser-and-device-detector',
+  'ua-parser': 'https://rapidapi.com/amphy2000/api/user-agent-parser-device-detector',
   'fuel-prices': 'https://rapidapi.com/amphy2000/api/us-fuel-prices-tracker',
   'barcode': 'https://rapidapi.com/amphy2000/api/barcode-and-qr-code-generator1',
   'dns-lookup': 'https://rapidapi.com/amphy2000/api/dns-record-lookup-domain-diagnostics',
