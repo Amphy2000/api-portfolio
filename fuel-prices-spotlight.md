@@ -48,7 +48,7 @@ The API scrapes, normalizes, and filters average price data for Regular, Midgrad
 ```javascript
 async function getFuelPrices(state = null, fuelType = null) {
   const apiKey = 'YOUR_RAPIDAPI_KEY';
-  let url = 'https://programmatic-seo-fuel-price-tracker.p.rapidapi.com/fuel-prices';
+  let url = 'https://us-fuel-prices-tracker.p.rapidapi.com/fuel-prices';
   const params = [];
   if (state) params.push(`state=${encodeURIComponent(state)}`);
   if (fuelType) params.push(`type=${encodeURIComponent(fuelType)}`);
@@ -58,7 +58,7 @@ async function getFuelPrices(state = null, fuelType = null) {
     method: 'GET',
     headers: {
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'programmatic-seo-fuel-price-tracker.p.rapidapi.com'
+      'x-rapidapi-host': 'us-fuel-prices-tracker.p.rapidapi.com'
     }
   });
 
@@ -72,7 +72,7 @@ async function getFuelPrices(state = null, fuelType = null) {
 import requests
 
 def get_fuel_prices(state=None, fuel_type=None):
-    url = "https://programmatic-seo-fuel-price-tracker.p.rapidapi.com/fuel-prices"
+    url = "https://us-fuel-prices-tracker.p.rapidapi.com/fuel-prices"
     querystring = {}
     if state:
         querystring["state"] = state
@@ -81,7 +81,7 @@ def get_fuel_prices(state=None, fuel_type=None):
         
     headers = {
         "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
-        "x-rapidapi-host": "programmatic-seo-fuel-price-tracker.p.rapidapi.com"
+        "x-rapidapi-host": "us-fuel-prices-tracker.p.rapidapi.com"
     }
     
     response = requests.get(url, headers=headers, params=querystring)
@@ -92,8 +92,8 @@ def get_fuel_prices(state=None, fuel_type=None):
 ```bash
 # Query diesel price in Texas
 curl --request GET \
-	--url 'https://programmatic-seo-fuel-price-tracker.p.rapidapi.com/fuel-prices?state=TX&type=diesel' \
-	--header 'x-rapidapi-host: programmatic-seo-fuel-price-tracker.p.rapidapi.com' \
+	--url 'https://us-fuel-prices-tracker.p.rapidapi.com/fuel-prices?state=TX&type=diesel' \
+	--header 'x-rapidapi-host: us-fuel-prices-tracker.p.rapidapi.com' \
 	--header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
 ```
 
