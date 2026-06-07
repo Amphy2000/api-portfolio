@@ -253,6 +253,13 @@ body {
   padding: 0.75rem 1rem;
   backdrop-filter: blur(10px);
   text-align: center;
+  transition: var(--transition-smooth);
+}
+
+.stat-card:hover {
+  border-color: var(--secondary);
+  box-shadow: 0 4px 20px var(--secondary-glow);
+  transform: translateY(-2px);
 }
 
 .stat-value {
@@ -304,6 +311,12 @@ body {
   transition: var(--transition-smooth);
   position: relative;
   overflow: hidden;
+}
+
+.glass-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 12px 40px 0 rgba(139, 92, 246, 0.12), 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
 }
 
 .glass-card::before {
@@ -474,18 +487,36 @@ body {
   background: linear-gradient(135deg, var(--secondary), hsl(187, 92%, 35%));
   color: #fff;
   box-shadow: 0 4px 16px var(--secondary-glow);
+  animation: pulse-button 3s infinite;
 }
 
 .btn-rapid:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px hsla(187, 92%, 45%, 0.25);
+  box-shadow: 0 6px 25px hsla(187, 92%, 45%, 0.4);
   filter: brightness(1.1);
+  animation: none;
+}
+
+.btn-rapid:active {
+  transform: translateY(1px);
 }
 
 .btn-rapid svg {
   width: 16px;
   height: 16px;
   fill: #fff;
+}
+
+@keyframes pulse-button {
+  0% {
+    box-shadow: 0 4px 16px var(--secondary-glow);
+  }
+  50% {
+    box-shadow: 0 4px 25px hsla(187, 92%, 45%, 0.45);
+  }
+  100% {
+    box-shadow: 0 4px 16px var(--secondary-glow);
+  }
 }
 
 /* Console Header Tabs */
@@ -731,4 +762,138 @@ pre code {
 .tooltip.show::after {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* Features Grid */
+.features-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+.feature-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  transition: var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature-card:hover {
+  border-color: var(--secondary);
+  box-shadow: 0 8px 24px var(--secondary-glow);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: var(--secondary-glow);
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.feature-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-glow);
+}
+
+.feature-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* CTA conversion banner */
+.cta-banner {
+  background: linear-gradient(135deg, hsla(258, 90%, 12%, 0.5), hsla(187, 92%, 8%, 0.5));
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cta-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.cta-title {
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.cta-desc {
+  color: var(--text-muted);
+  font-size: 0.925rem;
+  max-width: 600px;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.btn-cta {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  font-size: 0.95rem;
+  padding: 0.8rem 2.25rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 20px var(--primary-glow);
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  transition: var(--transition-smooth);
+}
+
+.btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px hsla(258, 90%, 66%, 0.35);
+  filter: brightness(1.15);
+}
+
+@media (max-width: 768px) {
+  .features-section {
+    grid-template-columns: 1fr;
+  }
+  .cta-banner {
+    padding: 2rem 1.25rem;
+  }
+  .cta-title {
+    font-size: 1.4rem;
+  }
 }

@@ -222,6 +222,7 @@ const panelMethod = document.getElementById('panel-method');
 const dynamicInputs = document.getElementById('dynamic-inputs');
 const btnRun = document.getElementById('btn-run');
 const btnSubscribe = document.getElementById('btn-subscribe');
+const btnMainCta = document.getElementById('btn-main-cta');
 const infoPath = document.getElementById('info-path');
 const infoHost = document.getElementById('info-host');
 const consoleOutput = document.getElementById('console-output');
@@ -405,6 +406,7 @@ function selectApi(api) {
   // Set details path footer
   infoPath.textContent = `/api/${api.key}`;
   btnSubscribe.href = api.rapidApiUrl;
+  if (btnMainCta) btnMainCta.href = api.rapidApiUrl;
 
   // Build inputs dynamically
   renderFormInputs(api.inputs);
