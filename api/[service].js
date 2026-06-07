@@ -47,7 +47,8 @@ export default async function handler(req, res) {
   const referer = req.headers['referer'] || '';
   const origin = req.headers['origin'] || '';
   const host = req.headers['host'] || '';
-  const proxySecret = req.headers['x-rapidapi-proxy-secret'] || req.headers['x-amphy-secret'] || '';
+  const incomingRapidSecret = req.headers['x-rapidapi-proxy-secret'] || '';
+  const incomingCustomSecret = req.headers['x-amphy-secret'] || '';
 
   const isLocal = host.includes('localhost') || host.includes('127.0.0.1') || host.includes('3000');
   
@@ -58,7 +59,8 @@ export default async function handler(req, res) {
   const expectedSecrets = process.env.RAPIDAPI_PROXY_SECRET
     ? process.env.RAPIDAPI_PROXY_SECRET.split(',').map(s => s.trim())
     : [];
-  const isFromRapidAPI = expectedSecrets.length > 0 && expectedSecrets.includes(proxySecret);
+  const isFromRapidAPI = expectedSecrets.length > 0 && 
+    (expectedSecrets.includes(incomingRapidSecret) || expectedSecrets.includes(incomingCustomSecret));
 
   if (!isLocal && !isFromPlayground && !isFromRapidAPI && cleanService !== 'health') {
     if (req.query?.debug === 'true' || req.headers['debug'] === 'true') {
@@ -66,7 +68,7 @@ export default async function handler(req, res) {
         error: 'Direct API access is restricted.',
         debug_diagnostics: {
           incoming_headers: req.headers,
-          detected_proxy_secret: proxySecret,
+          detected_proxy_secret: incomingCustomSecret || incomingRapidSecret,
           expected_secrets_list: expectedSecrets,
           env_raw_value: process.env.RAPIDAPI_PROXY_SECRET ? `${process.env.RAPIDAPI_PROXY_SECRET.substring(0, 4)}...` : 'not_set',
           match_success: isFromRapidAPI,
