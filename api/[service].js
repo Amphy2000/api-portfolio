@@ -61,6 +61,20 @@ export default async function handler(req, res) {
   const isFromRapidAPI = expectedSecrets.length > 0 && expectedSecrets.includes(proxySecret);
 
   if (!isLocal && !isFromPlayground && !isFromRapidAPI && cleanService !== 'health') {
+    if (req.query?.debug === 'true') {
+      return res.status(401).json({
+        error: 'Direct API access is restricted.',
+        debug_diagnostics: {
+          incoming_headers: req.headers,
+          detected_proxy_secret: proxySecret,
+          expected_secrets_list: expectedSecrets,
+          env_raw_value: process.env.RAPIDAPI_PROXY_SECRET ? `${process.env.RAPIDAPI_PROXY_SECRET.substring(0, 4)}...` : 'not_set',
+          match_success: isFromRapidAPI,
+          is_local: isLocal,
+          is_from_playground: isFromPlayground
+        }
+      });
+    }
     return res.status(401).json({
       error: 'Direct API access is restricted.',
       message: 'To use this API in your applications, you must subscribe on RapidAPI: https://rapidapi.com/user/Amphy2000'
