@@ -34,7 +34,8 @@ const handlers = {
 
 export default async function handler(req, res) {
   const { service } = req.query;
-  const targetHandler = handlers[service];
+  const cleanService = (service || '').trim().toLowerCase().replace(/\/$/, '');
+  const targetHandler = handlers[cleanService];
 
   if (!targetHandler) {
     return res.status(404).json({
@@ -59,7 +60,7 @@ export default async function handler(req, res) {
     : [];
   const isFromRapidAPI = expectedSecrets.length > 0 && expectedSecrets.includes(proxySecret);
 
-  if (!isLocal && !isFromPlayground && !isFromRapidAPI && service !== 'health') {
+  if (!isLocal && !isFromPlayground && !isFromRapidAPI && cleanService !== 'health') {
     return res.status(401).json({
       error: 'Direct API access is restricted.',
       message: 'To use this API in your applications, you must subscribe on RapidAPI: https://rapidapi.com/user/Amphy2000'
@@ -69,9 +70,9 @@ export default async function handler(req, res) {
   try {
     return await targetHandler(req, res);
   } catch (err) {
-    console.error(`Error executing handler for service "${service}":`, err);
+    console.error(`Error executing handler for service "${cleanService}":`, err);
     return res.status(500).json({
-      error: `Internal server error executing service "${service}"`,
+      error: `Internal server error executing service "${cleanService}"`,
       details: err.message
     });
   }
