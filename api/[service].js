@@ -61,7 +61,7 @@ export default async function handler(req, res) {
   const isFromRapidAPI = expectedSecrets.length > 0 && expectedSecrets.includes(proxySecret);
 
   if (!isLocal && !isFromPlayground && !isFromRapidAPI && cleanService !== 'health') {
-    if (req.query?.debug === 'true') {
+    if (req.query?.debug === 'true' || req.headers['debug'] === 'true') {
       return res.status(401).json({
         error: 'Direct API access is restricted.',
         debug_diagnostics: {
