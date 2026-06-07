@@ -47,13 +47,13 @@ The API fetches webpages, parses all JSON-LD blocks, flattens graph structures, 
 ```javascript
 async function extractPageSchemas(targetUrl) {
   const apiKey = 'YOUR_RAPIDAPI_KEY';
-  const url = `https://schema-extractor-jsonld-parser.p.rapidapi.com/schema-extractor?url=${encodeURIComponent(targetUrl)}`;
+  const url = `https://structured-schema-json-ld-parser.p.rapidapi.com/schema-extractor?url=${encodeURIComponent(targetUrl)}`;
 
   const response = await fetch(url, {
     method: 'GET',
     headers: {
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'schema-extractor-jsonld-parser.p.rapidapi.com'
+      'x-rapidapi-host': 'structured-schema-json-ld-parser.p.rapidapi.com'
     }
   });
 
@@ -67,11 +67,11 @@ async function extractPageSchemas(targetUrl) {
 import requests
 
 def extract_page_schemas(target_url):
-    url = "https://schema-extractor-jsonld-parser.p.rapidapi.com/schema-extractor"
+    url = "https://structured-schema-json-ld-parser.p.rapidapi.com/schema-extractor"
     querystring = {"url": target_url}
     headers = {
         "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
-        "x-rapidapi-host": "schema-extractor-jsonld-parser.p.rapidapi.com"
+        "x-rapidapi-host": "structured-schema-json-ld-parser.p.rapidapi.com"
     }
     
     response = requests.get(url, headers=headers, params=querystring)
@@ -81,8 +81,8 @@ def extract_page_schemas(target_url):
 ### cURL
 ```bash
 curl --request GET \
-	--url 'https://schema-extractor-jsonld-parser.p.rapidapi.com/schema-extractor?url=https%3A%2F%2Fexample.com' \
-	--header 'x-rapidapi-host: schema-extractor-jsonld-parser.p.rapidapi.com' \
+	--url 'https://structured-schema-json-ld-parser.p.rapidapi.com/schema-extractor?url=https%3A%2F%2Fexample.com' \
+	--header 'x-rapidapi-host: structured-schema-json-ld-parser.p.rapidapi.com' \
 	--header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
 ```
 

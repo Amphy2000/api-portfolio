@@ -47,13 +47,13 @@ The API processes DNS lookups in parallel directly from Vercel's edge network us
 ```javascript
 async function lookupDns(domainName) {
   const apiKey = 'YOUR_RAPIDAPI_KEY';
-  const url = `https://dns-record-lookup-diagnostics.p.rapidapi.com/dns-lookup?domain=${encodeURIComponent(domainName)}`;
+  const url = `https://dns-record-lookup-domain-diagnostics.p.rapidapi.com/dns-lookup?domain=${encodeURIComponent(domainName)}`;
 
   const response = await fetch(url, {
     method: 'GET',
     headers: {
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'dns-record-lookup-diagnostics.p.rapidapi.com'
+      'x-rapidapi-host': 'dns-record-lookup-domain-diagnostics.p.rapidapi.com'
     }
   });
 
@@ -67,11 +67,11 @@ async function lookupDns(domainName) {
 import requests
 
 def lookup_dns(domain_name):
-    url = "https://dns-record-lookup-diagnostics.p.rapidapi.com/dns-lookup"
+    url = "https://dns-record-lookup-domain-diagnostics.p.rapidapi.com/dns-lookup"
     querystring = {"domain": domain_name}
     headers = {
         "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
-        "x-rapidapi-host": "dns-record-lookup-diagnostics.p.rapidapi.com"
+        "x-rapidapi-host": "dns-record-lookup-domain-diagnostics.p.rapidapi.com"
     }
     
     response = requests.get(url, headers=headers, params=querystring)
@@ -81,8 +81,8 @@ def lookup_dns(domain_name):
 ### cURL
 ```bash
 curl --request GET \
-	--url 'https://dns-record-lookup-diagnostics.p.rapidapi.com/dns-lookup?domain=github.com' \
-	--header 'x-rapidapi-host: dns-record-lookup-diagnostics.p.rapidapi.com' \
+	--url 'https://dns-record-lookup-domain-diagnostics.p.rapidapi.com/dns-lookup?domain=github.com' \
+	--header 'x-rapidapi-host: dns-record-lookup-domain-diagnostics.p.rapidapi.com' \
 	--header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
 ```
 

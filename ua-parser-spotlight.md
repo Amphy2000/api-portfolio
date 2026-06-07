@@ -53,14 +53,14 @@ The API processes incoming User-Agent strings, runs parser heuristics, checks bo
 ```javascript
 async function parseUserAgent(uaString = null) {
   const apiKey = 'YOUR_RAPIDAPI_KEY';
-  const baseUrl = 'https://user-agent-parser-device-detector.p.rapidapi.com/ua-parser';
+  const baseUrl = 'https://user-agent-parser-and-device-detector.p.rapidapi.com/ua-parser';
   const url = uaString ? `${baseUrl}?ua=${encodeURIComponent(uaString)}` : baseUrl;
 
   const response = await fetch(url, {
     method: 'GET',
     headers: {
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'user-agent-parser-device-detector.p.rapidapi.com'
+      'x-rapidapi-host': 'user-agent-parser-and-device-detector.p.rapidapi.com'
     }
   });
 
@@ -74,11 +74,11 @@ async function parseUserAgent(uaString = null) {
 import requests
 
 def parse_user_agent(ua_string=None):
-    url = "https://user-agent-parser-device-detector.p.rapidapi.com/ua-parser"
+    url = "https://user-agent-parser-and-device-detector.p.rapidapi.com/ua-parser"
     querystring = {"ua": ua_string} if ua_string else {}
     headers = {
         "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
-        "x-rapidapi-host": "user-agent-parser-device-detector.p.rapidapi.com"
+        "x-rapidapi-host": "user-agent-parser-and-device-detector.p.rapidapi.com"
     }
     
     response = requests.get(url, headers=headers, params=querystring)
@@ -89,14 +89,14 @@ def parse_user_agent(ua_string=None):
 ```bash
 # Parse a custom User-Agent string
 curl --request GET \
-	--url 'https://user-agent-parser-device-detector.p.rapidapi.com/ua-parser?ua=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2017_0%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F17.0%20Mobile%2F15E148%20Safari%2F604.1' \
-	--header 'x-rapidapi-host: user-agent-parser-device-detector.p.rapidapi.com' \
+	--url 'https://user-agent-parser-and-device-detector.p.rapidapi.com/ua-parser?ua=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2017_0%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F17.0%20Mobile%2F15E148%20Safari%2F604.1' \
+	--header 'x-rapidapi-host: user-agent-parser-and-device-detector.p.rapidapi.com' \
 	--header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
 
 # Auto-detect caller's User-Agent string
 curl --request GET \
-	--url 'https://user-agent-parser-device-detector.p.rapidapi.com/ua-parser' \
-	--header 'x-rapidapi-host: user-agent-parser-device-detector.p.rapidapi.com' \
+	--url 'https://user-agent-parser-and-device-detector.p.rapidapi.com/ua-parser' \
+	--header 'x-rapidapi-host: user-agent-parser-and-device-detector.p.rapidapi.com' \
 	--header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
 ```
 

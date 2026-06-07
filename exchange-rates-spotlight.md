@@ -51,7 +51,7 @@ The backend acts as a real-time translator, recalculating cross-rates dynamicall
 ```javascript
 async function getExchangeRates(base = 'USD', targetSymbols = null) {
   const apiKey = 'YOUR_RAPIDAPI_KEY';
-  let url = `https://exchange-rates-converter.p.rapidapi.com/exchange-rates?base=${base}`;
+  let url = `https://multi-currency-crypto-exchange-rates-api.p.rapidapi.com/exchange-rates?base=${base}`;
   if (targetSymbols) {
     url += `&symbols=${encodeURIComponent(targetSymbols)}`;
   }
@@ -60,7 +60,7 @@ async function getExchangeRates(base = 'USD', targetSymbols = null) {
     method: 'GET',
     headers: {
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'exchange-rates-converter.p.rapidapi.com'
+      'x-rapidapi-host': 'multi-currency-crypto-exchange-rates-api.p.rapidapi.com'
     }
   });
 
@@ -74,14 +74,14 @@ async function getExchangeRates(base = 'USD', targetSymbols = null) {
 import requests
 
 def get_exchange_rates(base='USD', symbols=None):
-    url = "https://exchange-rates-converter.p.rapidapi.com/exchange-rates"
+    url = "https://multi-currency-crypto-exchange-rates-api.p.rapidapi.com/exchange-rates"
     querystring = {"base": base}
     if symbols:
         querystring["symbols"] = symbols
         
     headers = {
         "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
-        "x-rapidapi-host": "exchange-rates-converter.p.rapidapi.com"
+        "x-rapidapi-host": "multi-currency-crypto-exchange-rates-api.p.rapidapi.com"
     }
     
     response = requests.get(url, headers=headers, params=querystring)
@@ -91,8 +91,8 @@ def get_exchange_rates(base='USD', symbols=None):
 ### cURL
 ```bash
 curl --request GET \
-	--url 'https://exchange-rates-converter.p.rapidapi.com/exchange-rates?base=EUR&symbols=USD%2CGBP%2CBTC' \
-	--header 'x-rapidapi-host: exchange-rates-converter.p.rapidapi.com' \
+	--url 'https://multi-currency-crypto-exchange-rates-api.p.rapidapi.com/exchange-rates?base=EUR&symbols=USD%2CGBP%2CBTC' \
+	--header 'x-rapidapi-host: multi-currency-crypto-exchange-rates-api.p.rapidapi.com' \
 	--header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
 ```
 

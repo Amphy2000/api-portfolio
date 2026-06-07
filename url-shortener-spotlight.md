@@ -79,14 +79,14 @@ The API exposes endpoints for link creation, client redirection, and statistical
 ```javascript
 async function createShortUrl(longUrl) {
   const apiKey = 'YOUR_RAPIDAPI_KEY';
-  const url = 'https://url-shortener-link-analytics.p.rapidapi.com/shorten';
+  const url = 'https://url-shortener-link-analytics-api.p.rapidapi.com/shorten';
 
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'url-shortener-link-analytics.p.rapidapi.com'
+      'x-rapidapi-host': 'url-shortener-link-analytics-api.p.rapidapi.com'
     },
     body: JSON.stringify({ url: longUrl })
   });
@@ -101,11 +101,11 @@ async function createShortUrl(longUrl) {
 import requests
 
 def get_link_analytics(slug):
-    url = "https://url-shortener-link-analytics.p.rapidapi.com/shorten"
+    url = "https://url-shortener-link-analytics-api.p.rapidapi.com/shorten"
     querystring = {"slug": slug}
     headers = {
         "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
-        "x-rapidapi-host": "url-shortener-link-analytics.p.rapidapi.com"
+        "x-rapidapi-host": "url-shortener-link-analytics-api.p.rapidapi.com"
     }
     
     response = requests.get(url, headers=headers, params=querystring)
@@ -115,8 +115,8 @@ def get_link_analytics(slug):
 ### cURL - Redirect Endpoint
 ```bash
 curl --request GET \
-	--url 'https://url-shortener-link-analytics.p.rapidapi.com/redirect?slug=jrfx5u' \
-	--header 'x-rapidapi-host: url-shortener-link-analytics.p.rapidapi.com' \
+	--url 'https://url-shortener-link-analytics-api.p.rapidapi.com/redirect?slug=jrfx5u' \
+	--header 'x-rapidapi-host: url-shortener-link-analytics-api.p.rapidapi.com' \
 	--header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
 ```
 

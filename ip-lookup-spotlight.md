@@ -53,13 +53,13 @@ The API processes lookups through a cached, self-healing network chain designed 
 ```javascript
 async function lookupIP(ipAddress) {
   const apiKey = 'YOUR_RAPIDAPI_KEY';
-  const url = `https://ip-geolocation-vpn-detector.p.rapidapi.com/ip-lookup?ip=${encodeURIComponent(ipAddress)}`;
+  const url = `https://ip-geolocation-vpn-proxy-shield.p.rapidapi.com/ip-lookup?ip=${encodeURIComponent(ipAddress)}`;
 
   const response = await fetch(url, {
     method: 'GET',
     headers: {
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'ip-geolocation-vpn-detector.p.rapidapi.com'
+      'x-rapidapi-host': 'ip-geolocation-vpn-proxy-shield.p.rapidapi.com'
     }
   });
 
@@ -73,11 +73,11 @@ async function lookupIP(ipAddress) {
 import requests
 
 def lookup_ip(ip_address):
-    url = "https://ip-geolocation-vpn-detector.p.rapidapi.com/ip-lookup"
+    url = "https://ip-geolocation-vpn-proxy-shield.p.rapidapi.com/ip-lookup"
     querystring = {"ip": ip_address}
     headers = {
         "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
-        "x-rapidapi-host": "ip-geolocation-vpn-detector.p.rapidapi.com"
+        "x-rapidapi-host": "ip-geolocation-vpn-proxy-shield.p.rapidapi.com"
     }
     
     response = requests.get(url, headers=headers, params=querystring)
@@ -87,8 +87,8 @@ def lookup_ip(ip_address):
 ### cURL
 ```bash
 curl --request GET \
-	--url 'https://ip-geolocation-vpn-detector.p.rapidapi.com/ip-lookup?ip=8.8.8.8' \
-	--header 'x-rapidapi-host: ip-geolocation-vpn-detector.p.rapidapi.com' \
+	--url 'https://ip-geolocation-vpn-proxy-shield.p.rapidapi.com/ip-lookup?ip=8.8.8.8' \
+	--header 'x-rapidapi-host: ip-geolocation-vpn-proxy-shield.p.rapidapi.com' \
 	--header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
 ```
 
