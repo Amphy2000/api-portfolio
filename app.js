@@ -25,7 +25,7 @@ const RAPIDAPI_LINKS = {
   'redirect': 'https://rapidapi.com/amphy2000/api/url-shortener-link-analytics-api', // Shares shorten page
   'health': 'https://rapidapi.com/amphy2000/api/url-shortener-link-analytics-api',
   'vat-validator': 'https://rapidapi.com/amphy2000/api/european-vat-company-validator',
-  'ssl-checker': 'https://rapidapi.com/amphy2000/api/ssl-certificate-validity-checker'
+  'ssl-checker': 'https://rapidapi.com/amphy2000/api/ssl-certificate-validity-expiry-checker'
 };
 
 // All 15 APIs config schema
