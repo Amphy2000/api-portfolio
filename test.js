@@ -14,6 +14,7 @@ import fuelTrackerHandler from './api/_fuel-tracker.js';
 import sslHandler from './api/_ssl-checker.js';
 import whoisHandler from './api/_whois-lookup.js';
 import smsShieldHandler from './api/_sms-shield.js';
+import portScannerHandler from './api/_port-scanner.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
@@ -805,6 +806,36 @@ async function runSmsShieldTest(phoneVal) {
   console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
 }
 
+// Helper to run Port Scanner tests
+async function runPortScannerTest(hostVal, portsVal, timeoutVal) {
+  const query = {};
+  if (hostVal !== undefined) query.host = hostVal;
+  if (portsVal !== undefined) query.ports = portsVal;
+  if (timeoutVal !== undefined) query.timeout = timeoutVal;
+
+  const req = {
+    method: 'GET',
+    query
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { res.headers[name] = val; },
+    status: (code) => { res.status_code = code; return res; },
+    json: (data) => { res.body = data; return res; },
+    send: (data) => { res.body = data; return res; },
+    end: () => { return res; }
+  };
+
+  await portScannerHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`PORT SCANNER TEST: host=${hostVal || 'NONE'}, ports=${portsVal || 'DEFAULT'}, timeout=${timeoutVal || 'DEFAULT'}`);
+  console.log(`STATUS: ${res.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -920,6 +951,16 @@ async function main() {
   await runSmsShieldTest('+447451234567'); // Blacklisted temporary burner
   await runSmsShieldTest('invalid_phone'); // Invalid phone format
   await runSmsShieldTest(null); // Missing parameter
+
+  // SECTION 16: PORT SCANNER & NETWORK DIAGNOSTICS TESTS
+  console.log("\n>>> Running Port Scanner & Network Diagnostics tests...");
+  await runPortScannerTest('google.com', '80,443'); // Public host (standard ports)
+  await runPortScannerTest('127.0.0.1', '80'); // Loopback IP (SSRF Block)
+  await runPortScannerTest('localhost', '22'); // Loopback hostname (SSRF Block)
+  await runPortScannerTest('192.168.1.1', '443'); // Private class C IP (SSRF Block)
+  await runPortScannerTest('google.com', 'invalid_port'); // Invalid port string
+  await runPortScannerTest('google.com', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21'); // Too many ports (Limit: 20)
+  await runPortScannerTest(null); // Missing parameter
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");

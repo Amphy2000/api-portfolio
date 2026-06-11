@@ -27,7 +27,8 @@ const RAPIDAPI_LINKS = {
   'vat-validator': 'https://rapidapi.com/amphy2000/api/european-vat-company-validator',
   'ssl-checker': 'https://rapidapi.com/amphy2000/api/ssl-certificate-validity-expiry-checker',
   'whois-lookup': 'https://rapidapi.com/amphy2000/api/domain-whois-lookup-ownership-checker',
-  'sms-shield': 'https://rapidapi.com/amphy2000/api/disposable-virtual-phone-sms-shield'
+  'sms-shield': 'https://rapidapi.com/amphy2000/api/disposable-virtual-phone-sms-shield',
+  'port-scanner': 'https://rapidapi.com/amphy2000/api/port-scanner-network-diagnostics'
 };
 
 // All 15 APIs config schema
@@ -54,6 +55,19 @@ const APIS = [
     rapidApiUrl: RAPIDAPI_LINKS['sms-shield'] || RAPIDAPI_PROFILE_URL,
     inputs: [
       { name: 'phone', label: 'Phone Number', type: 'text', placeholder: '+12015550199', default: '+12015550199' }
+    ]
+  },
+  {
+    key: 'port-scanner',
+    name: 'Port Scanner & Network Diagnostics',
+    category: 'security',
+    method: 'GET',
+    description: 'Scans target hosts (IP addresses or domains) for open TCP ports, identifies common network services, performs banner grabbing to identify software versions, and validates IPs to prevent SSRF vulnerabilities.',
+    rapidApiUrl: RAPIDAPI_LINKS['port-scanner'] || RAPIDAPI_PROFILE_URL,
+    inputs: [
+      { name: 'host', label: 'Target Host (IP or Domain)', type: 'text', placeholder: 'google.com', default: 'google.com' },
+      { name: 'ports', label: 'Ports to Scan (Comma separated, max 20)', type: 'text', placeholder: '22, 80, 443, 8080 (Leave blank for default 15)', default: '22, 80, 443, 8080' },
+      { name: 'timeout', label: 'Connection Timeout (ms)', type: 'range', min: 200, max: 3000, default: 1000 }
     ]
   },
   {
@@ -404,6 +418,7 @@ function getApiIcon(key) {
   const icons = {
     'email-shield': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
     'sms-shield': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line><path d="M9 6h6"></path><circle cx="12" cy="12" r="1"></circle></svg>',
+    'port-scanner': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 2v20M2 12h20M12 12m-6 0a6 6 0 1 0 12 0 6 6 0 1 0-12 0"></path></svg>',
     'ip-lookup': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>',
     'password-validator': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
     'ssl-checker': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path><path d="M12 15v3"></path></svg>',

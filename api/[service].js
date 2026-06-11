@@ -16,6 +16,7 @@ import fuelTrackerHandler from './_fuel-tracker.js';
 import sslHandler from './_ssl-checker.js';
 import whoisHandler from './_whois-lookup.js';
 import smsShieldHandler from './_sms-shield.js';
+import portScannerHandler from './_port-scanner.js';
 
 const handlers = {
   'email-shield': emailHandler,
@@ -35,7 +36,8 @@ const handlers = {
   'fuel-prices': fuelTrackerHandler,
   'ssl-checker': sslHandler,
   'whois-lookup': whoisHandler,
-  'sms-shield': smsShieldHandler
+  'sms-shield': smsShieldHandler,
+  'port-scanner': portScannerHandler
 };
 
 // In-memory rate limiting for playground traffic

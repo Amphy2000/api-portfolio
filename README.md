@@ -1,6 +1,6 @@
 # Amphy Premium API Suite & Developer Hub
 
-A consolidated, high-performance portfolio of 15 developer-focused serverless microservices deployed on Vercel, complete with an interactive frontend playground catalog.
+A consolidated, high-performance portfolio of 19 developer-focused serverless microservices deployed on Vercel, complete with an interactive frontend playground catalog.
 
 ## Microservices Included
 
@@ -22,6 +22,7 @@ A consolidated, high-performance portfolio of 15 developer-focused serverless mi
 16. **SSL Certificate Checker** (`/api/ssl-checker`)
 17. **WHOIS Domain Lookup** (`/api/whois-lookup`)
 18. **SMS Shield & Phone Validator** (`/api/sms-shield`)
+19. **Port Scanner & Network Diagnostics** (`/api/port-scanner`)
 
 ## Development & Testing
 
