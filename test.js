@@ -11,6 +11,7 @@ import exchangeRatesHandler from './api/_exchange-rates.js';
 import shortenHandler from './api/_shorten.js';
 import redirectHandler from './api/_redirect.js';
 import fuelTrackerHandler from './api/_fuel-tracker.js';
+import sslHandler from './api/_ssl-checker.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
@@ -695,6 +696,48 @@ async function runFuelTest(state, type) {
   }
 }
 
+// Helper to run SSL Certificate Checker tests
+async function runSslTest(domainVal, portVal) {
+  const query = {};
+  if (domainVal) query.domain = domainVal;
+  if (portVal) query.port = portVal;
+
+  const req = {
+    method: 'GET',
+    query
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { res.headers[name] = val; },
+    status: (code) => { res.status_code = code; return res; },
+    json: (data) => { res.body = data; return res; },
+    send: (data) => { res.body = data; return res; },
+    end: () => { return res; }
+  };
+
+  await sslHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`SSL CERTIFICATE TEST: domain=${domainVal || 'NONE'}, port=${portVal || 'NONE'}`);
+  console.log(`STATUS: ${res.status_code}`);
+  
+  if (res.body && res.body.success) {
+    const chainLength = res.body.chain ? res.body.chain.length : 0;
+    console.log(`RESPONSE:`, JSON.stringify({
+      ...res.body,
+      chain: `[Array of ${chainLength} intermediate certificates]`,
+      certificate: {
+        ...res.body.certificate,
+        subject_alternative_names: (res.body.certificate?.subject_alternative_names || []).slice(0, 5)
+      }
+    }, null, 2));
+  } else {
+    console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+  }
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -786,7 +829,15 @@ async function main() {
   await runFuelTest('California', 'diesel'); // Search by state full name and type diesel
   await runFuelTest(null, 'regular'); // Filter all states by type regular
   await runFuelTest('INVALID_STATE', null); // Invalid state error handling
-  await runFuelTest('NY', 'invalid_type'); // Invalid type error handling
+  await runFuelTest('NY', 'invalid_type'); // NY invalid type
+
+  // SECTION 13: SSL CERTIFICATE CHECKER TESTS
+  console.log("\n>>> Running SSL Certificate Checker tests...");
+  await runSslTest('google.com', '443'); // Valid trusted domain
+  await runSslTest('https://github.com/some/path'); // Valid domain extracted from URL
+  await runSslTest('invalid-domain-name-12345.xyz', '443'); // Unresolvable/invalid domain
+  await runSslTest('google.com', 'invalid_port'); // Invalid port format
+  await runSslTest(null, null); // Missing parameter
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");

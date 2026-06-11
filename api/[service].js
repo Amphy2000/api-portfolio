@@ -13,6 +13,7 @@ import redirectHandler from './_redirect.js';
 import barcodeHandler from './_barcode.js';
 import healthHandler from './_health.js';
 import fuelTrackerHandler from './_fuel-tracker.js';
+import sslHandler from './_ssl-checker.js';
 
 const handlers = {
   'email-shield': emailHandler,
@@ -29,7 +30,8 @@ const handlers = {
   'redirect': redirectHandler,
   'barcode': barcodeHandler,
   'health': healthHandler,
-  'fuel-prices': fuelTrackerHandler
+  'fuel-prices': fuelTrackerHandler,
+  'ssl-checker': sslHandler
 };
 
 // In-memory rate limiting for playground traffic
