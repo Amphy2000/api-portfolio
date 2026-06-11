@@ -20,6 +20,7 @@ A consolidated, high-performance portfolio of 15 developer-focused serverless mi
 14. **Server Cluster Health Checker** (`/api/health`)
 15. **European VAT & Company Validator** (`/api/vat-validator`)
 16. **SSL Certificate Checker** (`/api/ssl-checker`)
+17. **WHOIS Domain Lookup** (`/api/whois-lookup`)
 
 ## Development & Testing
 

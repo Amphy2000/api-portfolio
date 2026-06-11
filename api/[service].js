@@ -14,6 +14,7 @@ import barcodeHandler from './_barcode.js';
 import healthHandler from './_health.js';
 import fuelTrackerHandler from './_fuel-tracker.js';
 import sslHandler from './_ssl-checker.js';
+import whoisHandler from './_whois-lookup.js';
 
 const handlers = {
   'email-shield': emailHandler,
@@ -31,7 +32,8 @@ const handlers = {
   'barcode': barcodeHandler,
   'health': healthHandler,
   'fuel-prices': fuelTrackerHandler,
-  'ssl-checker': sslHandler
+  'ssl-checker': sslHandler,
+  'whois-lookup': whoisHandler
 };
 
 // In-memory rate limiting for playground traffic

@@ -12,6 +12,7 @@ import shortenHandler from './api/_shorten.js';
 import redirectHandler from './api/_redirect.js';
 import fuelTrackerHandler from './api/_fuel-tracker.js';
 import sslHandler from './api/_ssl-checker.js';
+import whoisHandler from './api/_whois-lookup.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
@@ -738,6 +739,43 @@ async function runSslTest(domainVal, portVal) {
   }
 }
 
+// Helper to run WHOIS Domain Lookup tests
+async function runWhoisTest(domainVal) {
+  const query = {};
+  if (domainVal) query.domain = domainVal;
+
+  const req = {
+    method: 'GET',
+    query
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { res.headers[name] = val; },
+    status: (code) => { res.status_code = code; return res; },
+    json: (data) => { res.body = data; return res; },
+    send: (data) => { res.body = data; return res; },
+    end: () => { return res; }
+  };
+
+  await whoisHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`WHOIS LOOKUP TEST: domain=${domainVal || 'NONE'}`);
+  console.log(`STATUS: ${res.status_code}`);
+  
+  if (res.body && res.body.success) {
+    const rawLen = res.body.raw ? res.body.raw.length : 0;
+    console.log(`RESPONSE:`, JSON.stringify({
+      ...res.body,
+      raw: `[Raw text of ${rawLen} characters]`
+    }, null, 2));
+  } else {
+    console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+  }
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -838,6 +876,13 @@ async function main() {
   await runSslTest('invalid-domain-name-12345.xyz', '443'); // Unresolvable/invalid domain
   await runSslTest('google.com', 'invalid_port'); // Invalid port format
   await runSslTest(null, null); // Missing parameter
+
+  // SECTION 14: WHOIS DOMAIN LOOKUP TESTS
+  console.log("\n>>> Running WHOIS Domain Lookup tests...");
+  await runWhoisTest('github.com'); // Valid domain
+  await runWhoisTest('https://google.com/some/path'); // URL sanitization extraction
+  await runWhoisTest('invalid-domain-name-12345.xyz'); // Unregistered/invalid TLD
+  await runWhoisTest(null); // Missing parameter
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");
