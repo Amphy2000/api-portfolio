@@ -21,6 +21,7 @@ A consolidated, high-performance portfolio of 15 developer-focused serverless mi
 15. **European VAT & Company Validator** (`/api/vat-validator`)
 16. **SSL Certificate Checker** (`/api/ssl-checker`)
 17. **WHOIS Domain Lookup** (`/api/whois-lookup`)
+18. **SMS Shield & Phone Validator** (`/api/sms-shield`)
 
 ## Development & Testing
 

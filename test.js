@@ -13,6 +13,7 @@ import redirectHandler from './api/_redirect.js';
 import fuelTrackerHandler from './api/_fuel-tracker.js';
 import sslHandler from './api/_ssl-checker.js';
 import whoisHandler from './api/_whois-lookup.js';
+import smsShieldHandler from './api/_sms-shield.js';
 
 // Mock global fetch for schema tests
 const originalFetch = globalThis.fetch;
@@ -776,6 +777,34 @@ async function runWhoisTest(domainVal) {
   }
 }
 
+// Helper to run SMS Shield & Validator tests
+async function runSmsShieldTest(phoneVal) {
+  const query = {};
+  if (phoneVal) query.phone = phoneVal;
+
+  const req = {
+    method: 'GET',
+    query
+  };
+
+  const res = {
+    status_code: 200,
+    headers: {},
+    body: null,
+    setHeader: (name, val) => { res.headers[name] = val; },
+    status: (code) => { res.status_code = code; return res; },
+    json: (data) => { res.body = data; return res; },
+    send: (data) => { res.body = data; return res; },
+    end: () => { return res; }
+  };
+
+  await smsShieldHandler(req, res);
+  console.log(`\n----------------------------------------`);
+  console.log(`SMS SHIELD TEST: phone=${phoneVal || 'NONE'}`);
+  console.log(`STATUS: ${res.status_code}`);
+  console.log(`RESPONSE:`, JSON.stringify(res.body, null, 2));
+}
+
 async function main() {
   console.log("==================================================");
   console.log("RUNNING PORTFOLIO API TEST SUITE (ES MODULES)");
@@ -883,6 +912,14 @@ async function main() {
   await runWhoisTest('https://google.com/some/path'); // URL sanitization extraction
   await runWhoisTest('invalid-domain-name-12345.xyz'); // Unregistered/invalid TLD
   await runWhoisTest(null); // Missing parameter
+
+  // SECTION 15: SMS SHIELD & PHONE VALIDATOR TESTS
+  console.log("\n>>> Running SMS Shield & Phone Validator tests...");
+  await runSmsShieldTest('+14155552671'); // Valid mobile
+  await runSmsShieldTest('+12015550199'); // Known VoIP prefix
+  await runSmsShieldTest('+447451234567'); // Blacklisted temporary burner
+  await runSmsShieldTest('invalid_phone'); // Invalid phone format
+  await runSmsShieldTest(null); // Missing parameter
 
   console.log("\n==================================================");
   console.log("ALL TESTS COMPLETED!");

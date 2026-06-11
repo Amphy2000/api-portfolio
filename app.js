@@ -26,7 +26,8 @@ const RAPIDAPI_LINKS = {
   'health': 'https://rapidapi.com/amphy2000/api/url-shortener-link-analytics-api',
   'vat-validator': 'https://rapidapi.com/amphy2000/api/european-vat-company-validator',
   'ssl-checker': 'https://rapidapi.com/amphy2000/api/ssl-certificate-validity-expiry-checker',
-  'whois-lookup': 'https://rapidapi.com/amphy2000/api/domain-whois-lookup-ownership-checker'
+  'whois-lookup': 'https://rapidapi.com/amphy2000/api/domain-whois-lookup-ownership-checker',
+  'sms-shield': 'https://rapidapi.com/amphy2000/api/disposable-virtual-phone-sms-shield'
 };
 
 // All 15 APIs config schema
@@ -42,6 +43,17 @@ const APIS = [
     inputs: [
       { name: 'email', label: 'Email Address', type: 'text', placeholder: 'user@disposabledomain.com', default: 'hello@dispostable.com' },
       { name: 'check_dns', label: 'Perform Live MX DNS Lookup', type: 'checkbox', default: false }
+    ]
+  },
+  {
+    key: 'sms-shield',
+    name: 'SMS Shield & Phone Validator',
+    category: 'security',
+    method: 'GET',
+    description: 'Detects disposable burner phone numbers used by public Receive SMS websites, parses E.164 country prefixes, flags virtual VoIP blocks, and issues risk scores to block registration fraud.',
+    rapidApiUrl: RAPIDAPI_LINKS['sms-shield'] || RAPIDAPI_PROFILE_URL,
+    inputs: [
+      { name: 'phone', label: 'Phone Number', type: 'text', placeholder: '+12015550199', default: '+12015550199' }
     ]
   },
   {
@@ -391,6 +403,7 @@ function renderSidebar() {
 function getApiIcon(key) {
   const icons = {
     'email-shield': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+    'sms-shield': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line><path d="M9 6h6"></path><circle cx="12" cy="12" r="1"></circle></svg>',
     'ip-lookup': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>',
     'password-validator': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
     'ssl-checker': '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path><path d="M12 15v3"></path></svg>',
